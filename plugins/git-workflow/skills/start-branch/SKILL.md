@@ -1,6 +1,6 @@
 ---
 name: start-branch
-description: Create a new git branch with an appropriate name for the current task and switch to it immediately — no new worktree directory, just a branch. Use when the user wants to start work on a fresh branch from the current position — phrases like "브랜치 만들어줘", "새 브랜치에서 작업 시작", "start a new branch", "create a branch for this", "작업 브랜치 파줘", "/start-branch". Do NOT use when the user explicitly wants a worktree (separate directory).
+description: Create a new git branch with an appropriate name and switch to it — from the current position by default, or from a named base branch (e.g. dev, master, main, stage) when one is specified. Use when the user wants to start work on a fresh branch — phrases like "브랜치 만들어줘", "master에서 브랜치 만들어줘", "dev 기준으로 브랜치 파줘", "stage에서 새 브랜치", "start a new branch", "create a branch for this", "branch off master", "작업 브랜치 파줘", "/start-branch". Do NOT use when the user explicitly wants a worktree (separate directory).
 license: MIT
 metadata:
   author: dkmqflx
@@ -9,7 +9,7 @@ metadata:
 
 # Start Branch
 
-Generate an appropriate branch name for the task and switch to it in the current working tree.
+Generate an appropriate branch name for the task and switch to it — from the current position, or from a named base branch.
 
 ## When to apply
 
@@ -34,11 +34,19 @@ Description rules: lowercase, hyphen-separated, 2–5 words, describes WHAT (not
 
 ## Steps
 
-1. Derive the branch name from the user's task description using the convention above.
+1. Determine the base:
+   - If the user named a specific branch (e.g. `dev`, `master`, `main`, `stage`), that is the base branch.
+   - Otherwise, the base is the current position — no checkout needed before branching.
+2. Derive the branch name from the user's task description using the convention above.
    If no task description was given (bare `/start-branch`), ask one short question first.
-2. Create and switch to the branch:
+3. If a base branch was named, switch to it and pull latest, then branch from it:
+   ```bash
+   git checkout <base branch> && git pull
+   git checkout -b <branch-name>
+   ```
+   Otherwise, branch directly from the current position:
    ```bash
    git checkout -b <branch-name>
    ```
-3. Confirm in one line: `Switched to new branch: <branch-name>`
-4. Begin the user's task.
+4. Confirm in one line: `Switched to new branch: <branch-name>` (append `(from <base branch>)` if a base was named)
+5. Begin the user's task.
