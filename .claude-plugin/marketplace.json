@@ -1,0 +1,15 @@
+{
+  "name": "git-workflow-plugin",
+  "description": "Git branch/worktree lifecycle skills for Claude Code",
+  "owner": {
+    "name": "dkmqflx",
+    "email": "dkmqflx@gmail.com"
+  },
+  "plugins": [
+    {
+      "name": "git-workflow",
+      "source": "./plugins/git-workflow",
+      "description": "6 git workflow skills covering worktree/branch creation, opening PRs with an AI-drafted title/body, and cleaning up branches/worktrees after merge."
+    }
+  ]
+}
