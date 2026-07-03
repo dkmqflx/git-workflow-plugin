@@ -1,6 +1,6 @@
 # git-workflow-plugin
 
-[![Release](https://img.shields.io/badge/release-v0.2.0-blue)](https://github.com/dkmqflx/git-workflow-plugin/releases/tag/git-workflow--v0.2.0)
+[![Release](https://img.shields.io/badge/release-v0.1.0-blue)](https://github.com/dkmqflx/git-workflow-plugin/releases/tag/git-workflow--v0.1.0)
 
 5 git workflow skills covering the full branch/worktree lifecycle: create a worktree or branch (from the current position or a named base branch), open a PR with an AI-drafted title/body, and clean up afterward. Base branch detection (`origin/HEAD`, falling back to `dev`/`main`/`master`) means these work regardless of what your repo calls its default branch.
 
