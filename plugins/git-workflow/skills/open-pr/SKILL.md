@@ -20,8 +20,9 @@ Opening a **new** PR for the current branch. **Do not apply** to update, review,
 ## Steps
 
 1. Determine the base branch:
-   - Try `git symbolic-ref refs/remotes/origin/HEAD` and strip the `refs/remotes/origin/` prefix.
-   - If that fails, use the first of `dev`, `main`, `master` that exists locally (`git show-ref --verify --quiet refs/heads/<name>`).
+   - If a `dev` branch exists locally or on the remote (`git show-ref --verify --quiet refs/heads/dev` or `refs/remotes/origin/dev`), the base is **always** `dev`. Stop here — do not fall through, whatever `origin/HEAD` points at.
+   - Otherwise try `git symbolic-ref refs/remotes/origin/HEAD` and strip the `refs/remotes/origin/` prefix.
+   - If that fails, use the first of `main`, `master` that exists locally (`git show-ref --verify --quiet refs/heads/<name>`).
    - If none exist, stop and ask the user which branch is the base.
 2. Record the current branch: `git rev-parse --abbrev-ref HEAD`. If it equals the base branch, stop and notify the user — there's nothing to open a PR from.
 3. Check for uncommitted changes (`git status --porcelain`). If any exist, stop and tell the user to commit first.
@@ -46,6 +47,7 @@ Opening a **new** PR for the current branch. **Do not apply** to update, review,
 
 ## Guardrails
 
+- Never open a PR against `main` or `master` while a `dev` branch exists — `dev` is the merge target. Never push commits straight to `main`/`master` either; work always lands through a PR into `dev`.
 - Always confirm the drafted title/body with the user before running `gh pr create` — opening a PR is visible to others and not easily undone.
 - A link is optional. Without one, open the PR with no `## Related` section — do not ask for a link and do not invent one.
 - If `gh` is not installed or not authenticated, stop and tell the user to run `gh auth login`.

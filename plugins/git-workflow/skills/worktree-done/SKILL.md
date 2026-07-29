@@ -23,8 +23,9 @@ Cleaning up after work done **inside a worktree**. **Do not apply** from the mai
    - Compare `git rev-parse --git-dir` and `git rev-parse --git-common-dir`. If they are equal, this is the main checkout — stop and tell the user to use the `branch-done` skill instead.
 2. Record the current worktree path (`git rev-parse --show-toplevel`) and current branch name (`git rev-parse --abbrev-ref HEAD`).
 3. Determine the base branch:
-   - Try `git symbolic-ref refs/remotes/origin/HEAD` and strip the `refs/remotes/origin/` prefix.
-   - If that fails, use the first of `dev`, `main`, `master` that exists locally (`git show-ref --verify --quiet refs/heads/<name>`).
+   - If a `dev` branch exists locally or on the remote (`git show-ref --verify --quiet refs/heads/dev` or `refs/remotes/origin/dev`), the base is **always** `dev`. Stop here — do not fall through, whatever `origin/HEAD` points at.
+   - Otherwise try `git symbolic-ref refs/remotes/origin/HEAD` and strip the `refs/remotes/origin/` prefix.
+   - If that fails, use the first of `main`, `master` that exists locally (`git show-ref --verify --quiet refs/heads/<name>`).
    - If none exist, stop and ask the user which branch is the base.
 4. If the recorded branch is the base branch (or is itself `dev`, `main`, or `master`), stop and notify the user.
 5. Check for uncommitted changes (`git status --porcelain`). If any exist, stop and report them — do not force removal.
