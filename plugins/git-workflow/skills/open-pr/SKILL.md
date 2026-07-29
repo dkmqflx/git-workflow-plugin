@@ -1,6 +1,6 @@
 ---
 name: open-pr
-description: Push the current branch and open a pull request against the detected base branch, with an AI-drafted title and body confirmed by the user before creating. Use when the user wants to open, create, or submit a PR — phrases like "PR 올려줘", "PR 열어줘", "PR 만들어줘", "open a PR", "create a pull request", "submit for review", "/open-pr". Do NOT use to review, comment on, or update an existing PR.
+description: Push the current branch and open a pull request against the detected base branch, with an AI-drafted title and body confirmed by the user before creating. A URL passed with the invocation (e.g. "/open-pr <link>") is linked in the PR body. Use when the user wants to open, create, or submit a PR — phrases like "PR 올려줘", "PR 열어줘", "PR 만들어줘", "open a PR", "create a pull request", "submit for review", "/open-pr". Do NOT use to review, comment on, or update an existing PR.
 license: MIT
 metadata:
   author: dkmqflx
@@ -33,19 +33,21 @@ Opening a **new** PR for the current branch. **Do not apply** to update, review,
    git diff <base branch>...HEAD
    ```
 7. Draft a title (under 70 characters) and a body with a `## Summary` (1–3 bullets) and `## Test plan` (checklist) section, covering **all** commits on the branch — not just the latest.
-8. Show the drafted title and body to the user and get confirmation before creating.
-9. Create the PR:
+8. Collect any URLs the user passed with the invocation (`/open-pr <link>`, or a link written anywhere in the request). If there is at least one, append a `## Related` section listing them as bullets at the end of the body. If there is none, leave the section out — **never ask the user for a link.**
+9. Show the drafted title and body to the user and get confirmation before creating.
+10. Create the PR:
    ```bash
    gh pr create --base <base branch> --title "<title>" --body "$(cat <<'EOF'
    <body>
    EOF
    )"
    ```
-10. Report the returned PR URL.
+11. Report the returned PR URL.
 
 ## Guardrails
 
 - Always confirm the drafted title/body with the user before running `gh pr create` — opening a PR is visible to others and not easily undone.
+- A link is optional. Without one, open the PR with no `## Related` section — do not ask for a link and do not invent one.
 - If `gh` is not installed or not authenticated, stop and tell the user to run `gh auth login`.
 - Never force-push (`git push -f`) to publish the branch.
 - Do not create a second PR if one already exists for this branch.
